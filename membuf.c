@@ -2,13 +2,13 @@
 #include <string.h>
 #include "membuf.h"
 
-MemBuf* create_mbuf(size_t grow)
+MemBuf* create_mbuf(size_t incr)
 {
   MemBuf *vec = malloc(sizeof(MemBuf));
   if ( vec ){
     vec->data = NULL;
     vec->size = vec->len = 0;
-    vec->step = grow;
+    vec->step = incr;
   }
 
   return vec;
@@ -20,9 +20,14 @@ void free_mbuf(MemBuf* vec)
   free(vec);
 }
 
+size_t length_membuf(MemBuf* vec)
+{
+  return vec->len;
+}
+
 int append_mbuf(MemBuf* vec, char* src, size_t len)
 {
-   size_t available = vec->size - vec->len; 
+  size_t available = vec->size - vec->len; 
 
   if ( len > available ){
     size_t sz = (len < vec->step)?vec->step:len;
@@ -41,14 +46,15 @@ int append_mbuf(MemBuf* vec, char* src, size_t len)
 
 size_t copy_mbuf(MemBuf* vec, char* dst, size_t len, size_t offset)
 {
-  if (len > offset) 
-    return 0;
+  size_t nbcpy = 0;
 
-  size_t plen = vec->len - offset;
-  size_t sc = (plen > len)?len:plen;
+  if (offset < vec->len){ 
+    size_t buf_len = vec->len - offset;
+    nbcpy = (buf_len > len)?len:buf_len;
 
-  memcpy(dst, vec->data+offset, sc);
+    memcpy(dst, vec->data+offset, nbcpy);
+  }
 
-  return sc;
+  return nbcpy;
 }
 
