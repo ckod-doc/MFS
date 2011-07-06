@@ -11,12 +11,9 @@ typedef struct {
 
 typedef void (*EnumNodeFn)(char*, int);
 
-enum {FN_PREV, FN_LAST};
 enum {NT_DIR, NT_FILE};
 
-FileNode* walk_path(const char* path, int state, NodeInfo* nodeinf);
-int create_dir(const char* name);
-int create_file(const char* name);
+FileNode* walk_path(const char* path, NodeInfo* nodeinf);
 int init();
 
 #endif

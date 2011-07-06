@@ -8,7 +8,7 @@ typedef struct ListNode {
   int type;
   int nlinks;
 
-  char* data;
+  void* data;
   struct ListNode *files;
 
   struct ListNode* next;

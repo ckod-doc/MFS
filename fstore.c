@@ -2,7 +2,7 @@
 #include <string.h>
 #include "fstore.h"
 
-static void decode_addr(off_t addr, size_t* base, size_t *offset)
+static void decode_addr(off_t addr, off_t* base, size_t *offset)
 {
   *base = addr >> SECTOR_SIZE_BITS;
   *offset = addr & (SECTOR_SIZE-1);
@@ -32,7 +32,7 @@ void free_file(FileStore* fs)
   free(fs);
 }
 
-static Sector* get_sector(FileStore* fs, Sector* begin_sector, size_t sector_key)
+static Sector* get_sector(FileStore* fs, Sector* begin_sector, off_t sector_key)
 {
   Sector* curr_sector;
   Sector* prev_sector = NULL;
@@ -70,7 +70,7 @@ static Sector* get_sector(FileStore* fs, Sector* begin_sector, size_t sector_key
   return new_sector;
 }
 
-static Sector* find_max_or_eq(Sector* last_sector, size_t sector_key)
+static Sector* find_max_or_eq(Sector* last_sector, off_t sector_key)
 {
   Sector* curr_sector = last_sector;
 
@@ -82,7 +82,8 @@ static Sector* find_max_or_eq(Sector* last_sector, size_t sector_key)
 
 size_t write_file(FileStore* fs, char* buf, size_t len, off_t offset)
 {
-  size_t num_sector,  sector_pos;
+  off_t num_sector;
+  size_t  sector_pos;
   size_t src_len = len;
   size_t pos = 0;
  
@@ -107,7 +108,7 @@ size_t write_file(FileStore* fs, char* buf, size_t len, off_t offset)
     }
   }
 
-  size_t new_file_size = offset + pos;
+  off_t new_file_size = offset + pos;
   if ( new_file_size > fs->size ) fs->size = new_file_size;
 
   return pos;
@@ -118,7 +119,8 @@ size_t read_file(FileStore* fs, char* buf, size_t len, off_t offset)
   if ( offset >= (off_t)fs->size ) 
     return 0;
 
-  size_t num_sector,  sector_pos;
+  off_t num_sector;
+  size_t sector_pos;
   size_t pos = 0;
   size_t cpy_file_len = fs->size - offset;
   size_t src_len = (len < cpy_file_len)?len:cpy_file_len;

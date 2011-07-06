@@ -7,13 +7,13 @@
 #define SECTOR_SIZE_BITS 9
 
 typedef struct SectorNode {
-  size_t key;
+  off_t key;
   char data[SECTOR_SIZE];
   struct SectorNode *next;
 } Sector;
 
 typedef struct {
-  size_t size;
+  off_t size;
   Sector* head;
 }FileStore;
 
