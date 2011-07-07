@@ -37,10 +37,10 @@ int mfs_mkdir(const char*path, mode_t mode)
   if ( walk_path(path, &ni) )
     return -EEXIST;
 
-  if ( !ni->dir )
-    return -EMOENT;
+  if ( !ni.dir )
+    return -ENOENT;
 
-  if ( !add_node(ni->dir, ni->name, NT_DIR) )
+  if ( !add_node(ni.dir, ni.name, NT_DIR) )
     return -ENOMEM;
 
   return 0;
@@ -89,7 +89,7 @@ int mfs_getattr(const char* path, struct stat* stbuf)
 int mfs_create(const char* path,  mode_t mode, struct fuse_file_info* fi)
 {
   (void)mode;
-  (viod)ni;
+  (void)fi;
 
   NodeInfo ni;
   FileNode* node = walk_path(path, &ni);
@@ -97,10 +97,10 @@ int mfs_create(const char* path,  mode_t mode, struct fuse_file_info* fi)
   if ( node )
     return -EEXIST;
 
-  if ( !ni->dir )
+  if ( !ni.dir )
     return -ENOENT;
 
-  if ( !add_node(ni->dir, ni->name. NT_FILE) )
+  if ( !add_node(ni.dir, ni.name, NT_FILE) )
     return -ENOMEM;
 
   return 0;
@@ -122,7 +122,7 @@ int mfs_unlink(const char* path, mode_t mode, struct fuse_file_info* fi)
   if ( node->data )
     free_file(node->data);
 
-  del_node(ni->dir, node);
+  del_node(ni.dir, node);
 
   return 0;
 }

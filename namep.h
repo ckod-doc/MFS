@@ -14,6 +14,6 @@ typedef void (*EnumNodeFn)(char*, int);
 enum {NT_DIR, NT_FILE};
 
 FileNode* walk_path(const char* path, NodeInfo* nodeinf);
-int init();
+int init_fs();
 
 #endif

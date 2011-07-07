@@ -3,7 +3,7 @@
 
 static FileNode* root = NULL;
 
-int init()
+int init_fs()
 {
   return init_root(&root, NT_DIR);
 }
