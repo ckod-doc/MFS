@@ -19,7 +19,7 @@ typedef struct {
 
 FileStore* alloc_file();
 void free_file(FileStore* fs);
-size_t write_file(FileStore* fs, char* buf, size_t len, off_t offset);
+size_t write_file(FileStore* fs, const char* buf, size_t len, off_t offset);
 size_t read_file(FileStore* fs, char* buf, size_t len, off_t offset);
 
 #endif

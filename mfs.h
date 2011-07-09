@@ -12,5 +12,9 @@ int mfs_rmdir(const char* path);
 int mfs_getattr(const char* path, struct stat* stbuf);
 int mfs_create(const char* path,  mode_t mode, struct fuse_file_info* fi);
 int mfs_unlink(const char* path);
+int mfs_read(const char* path, char* buf, size_t len, off_t offset, 
+	     struct fuse_file_info* fi);
+int mfs_write(const char* path, const char* buf, size_t len, off_t offset, 
+	      struct fuse_file_info* fi);
 
 #endif

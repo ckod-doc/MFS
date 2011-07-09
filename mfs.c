@@ -81,6 +81,10 @@ int mfs_getattr(const char* path, struct stat* stbuf)
   else {
     stbuf->st_mode = S_IFREG | 0777;
     stbuf->st_nlink = 1;
+    if ( node->data ){
+      FileStore *fs = node->data;
+      stbuf->st_size = fs->size;
+    }
   }
 
   return 0;
@@ -123,3 +127,44 @@ int mfs_unlink(const char* path)
 
   return 0;
 }
+
+int mfs_read(const char* path, char* buf, size_t len, off_t offset, 
+	     struct fuse_file_info* fi)
+{
+  (void)fi;
+
+  FileNode* node = walk_path(path, NULL);
+  if ( !node )
+    return -EBADF;
+
+  if ( node->type != NT_FILE )
+    return -EISDIR;
+
+  int nread = 0;
+  if ( node->data )
+    nread = read_file(node->data, buf, len, offset);
+
+  return nread;
+}
+
+int mfs_write(const char* path, const char* buf, size_t len, off_t offset, 
+	     struct fuse_file_info* fi)
+{
+  (void)fi;
+
+  FileNode* node = walk_path(path, NULL);
+  if ( !node )
+    return -EBADF;
+
+  if ( node->type != NT_FILE )
+    return -EISDIR;
+
+  if ( !node->data ){
+    node->data = alloc_file();
+    if ( !node->data )
+      return -EFBIG;
+  }
+
+  return write_file(node->data, buf, len, offset);
+}
+

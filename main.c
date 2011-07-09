@@ -6,7 +6,9 @@ static struct fuse_operations mfs_oper = {
     .mkdir      = mfs_mkdir,
     .rmdir      = mfs_rmdir,
     .create     = mfs_create,
-    .unlink     = mfs_unlink
+    .unlink     = mfs_unlink,
+    .read       = mfs_read,
+    .write      = mfs_write
 };
 
 int main(int ac, char** av)

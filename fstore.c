@@ -80,7 +80,7 @@ static Sector* find_max_or_eq(Sector* last_sector, off_t sector_key)
   return curr_sector;
 }
 
-size_t write_file(FileStore* fs, char* buf, size_t len, off_t offset)
+size_t write_file(FileStore* fs, const char* buf, size_t len, off_t offset)
 {
   off_t num_sector;
   size_t  sector_pos;
