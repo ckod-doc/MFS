@@ -106,11 +106,8 @@ int mfs_create(const char* path,  mode_t mode, struct fuse_file_info* fi)
   return 0;
 }
 
-int mfs_unlink(const char* path, mode_t mode, struct fuse_file_info* fi)
+int mfs_unlink(const char* path)
 {
-  (void)mode;
-  (void)fi;
-
   NodeInfo ni;
   FileNode* node = walk_path(path, &ni);
   if ( !node )
