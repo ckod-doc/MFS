@@ -40,7 +40,12 @@ FileNode* walk_path(const char* path, NodeInfo* nodeinf)
     
     while ( *path ){
       name_type = NT_FILE;
-      if ( !get_name(&path, buf, MAX_FILENAME) ) return NULL;
+
+      if ( !get_name(&path, buf, MAX_FILENAME) ) {
+	last_node = prev_node = NULL;
+	break;
+      }
+
       if ( *path == '/' ){
 	name_type = NT_DIR;
 	while ( *path == '/' ) ++path;
